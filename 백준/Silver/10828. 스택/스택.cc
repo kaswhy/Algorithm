@@ -1,16 +1,20 @@
 /*
  * 입력: 명령 수 n / 명령
  * 출력: 출력해야 할 시, 한 줄에 하나씩 출력
- * STL stack으로 구현
+ * 직접 구현(배열, 인덱스 변수)하여 스택 구현
  */
 #include <bits/stdc++.h>
 using namespace std;
 
+const int MX = 10000;
+int dt[MX];
+int pos = 0;
+
 int main() {
+    ios::sync_with_stdio(0); cin.tie(0);
+    
     int n;
     cin >> n;
-
-    stack<int> s;
     while(n--){
         string com;
         cin >> com;
@@ -18,24 +22,24 @@ int main() {
         if(com == "push"){
             int x;
             cin >> x;
-            s.push(x);
+            dt[pos++] = x;
             continue;
         }
         if(com == "pop"){
-            if(s.empty()){
+            if(!pos){
                 cout << -1 << "\n";
                 continue;
             }
-            cout << s.top() << "\n";
-            s.pop();
+            cout << dt[pos-1] << "\n";
+            pos--;
             continue;
         }
         if(com == "size"){
-            cout << s.size() << "\n";
+            cout << pos << "\n";
             continue;
         }
         if(com == "empty"){
-            if(s.empty()){
+            if(!pos){
                 cout << 1 << "\n";
                 continue;
             }
@@ -43,11 +47,11 @@ int main() {
             continue;
         }
         if(com == "top"){
-            if(s.empty()){
+            if(!pos){
                 cout << -1 << "\n";
                 continue;
             }
-            cout << s.top() << "\n";
+            cout << dt[pos-1] << "\n";
             continue;
         }
     }
