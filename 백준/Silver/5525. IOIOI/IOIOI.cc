@@ -9,20 +9,23 @@ int main() {
     int n, m;
     cin >> n >> m;
 
-    string s = "";
-    for(int i = 0; i<n; i++) {
-        s += "IO";
-    }
-    s += "I";
-
     string ans;
     cin >> ans;
 
     int cnt = 0;
 
-    for(int i = 0; i<m; i++){
-        if(ans.substr(i,2*n+1) == s) {
-            cnt++;
+    for(int i = 0; i < m; i++) {
+        if(ans[i] == 'O'){
+            continue;
+        }
+        int len = 0;
+        while(ans[i+1] == 'O' && ans[i+2] == 'I') {
+            len++;
+            if(len == n){
+                len--;
+                cnt++;
+            }
+            i += 2;
         }
     }
 
