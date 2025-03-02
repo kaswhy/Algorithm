@@ -1,31 +1,27 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int n, m;
-int arr[1024][1024];
-
 int main() {
-    ios::sync_with_stdio(0); cin.tie(0);
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
 
+    int n, m; // n은 표 크기, m은 질의
     cin >> n >> m;
-    for(int i = 0; i<n; i++){
-        for(int j = 0; j<n; j++){
-            int x;
-            cin >> x;
-            if(j == 0) arr[i][j] = x;
-            else arr[i][j] = arr[i][j-1] + x;
+
+    vector<vector<int>> square(n+1, vector<int>(n+1, 0));
+    vector<vector<int>> sums(n+1, vector<int>(n+1, 0)); // 부분합
+
+    for(int i = 1; i<=n; i++){
+        for(int j = 1; j<=n; j++) {
+            cin >> square[i][j];
+            sums[i][j] = sums[i-1][j] + sums[i][j-1] - sums[i-1][j-1] + square[i][j];
         }
     }
 
-    while(m--){
-        int tmp = 0;
+    for(int i = 0; i<m; i++) {
         int x1, y1, x2, y2;
         cin >> x1 >> y1 >> x2 >> y2;
-
-        for (int i = x1 - 1; i <= x2 -1; i++) {
-            tmp += arr[i][y2-1];
-            if(y1 > 1) tmp -= arr[i][y1-2];
-        }
-        cout << tmp << '\n';
+        cout << sums[x2][y2] - sums[x2][y1-1] - sums[x1-1][y2] + sums[x1-1][y1-1] << "\n";
     }
 }
