@@ -7,7 +7,7 @@ int K, N;
 vector<int> answer;
 
 void print() {
-    for(int i = 0; i<2; i++) {
+    for(int i = 0; i<N; i++) {
         cout << answer[i] << " ";
     }
     cout << "\n";
