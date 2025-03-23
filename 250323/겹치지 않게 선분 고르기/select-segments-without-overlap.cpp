@@ -8,12 +8,12 @@ int now = 0;
 int max_cnt = 0;
 bool v[1001];
 
-void choice(int num){ // 이때 num은 개수
+void choice(int num){
     if(num == n){
         return;
     }
 
-    for(int i = 0; i < n; i++) {
+    for(int i = num; i < n; i++) {
         // 현재 선분이 선택되지 않은 상태면 선택
         bool is_chosen = false;
         int x = x1[i];
