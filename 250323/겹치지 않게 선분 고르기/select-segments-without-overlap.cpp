@@ -1,62 +1,52 @@
 #include <iostream>
+#include <vector>
+#include <algorithm>
 
 using namespace std;
 
 int n;
-int x1[15], x2[15];
-int now = 0;
+pair<int, int> seg[15];
 int max_cnt = 0;
-int min_x = 1000, max_y = 0;
+vector<pair<int, int>> selected;
 
-void choice(int num){
-    if(num == n){
+bool isOverlap(pair<int, int> a, pair<int, int> b) {
+    // 끝점도 겹침으로 판단
+    return !(a.second < b.first || b.second < a.first);
+}
+
+void backtrack(int idx, int count) {
+    if (idx == n) {
+        max_cnt = max(max_cnt, count);
         return;
     }
 
-    for(int i = num; i < n; i++) {
-        // 현재 선분이 선택되지 않은 상태면 선택
-        int now_x = x1[i];
-        int now_y = x2[i]; // 현재 선분
-
-        // 선택된 거면 다음 거 보기
-        if((min_x <= now_x && now_x <= max_y) || (min_x <= now_y && now_y <= max_y)) {
-            continue;
+    // 현재 선분을 선택하는 경우
+    bool canSelect = true;
+    for (auto& s : selected) {
+        if (isOverlap(s, seg[idx])) {
+            canSelect = false;
+            break;
         }
-
-        // 선택 안 된 거면 업데이트
-        int tmp_x = min_x, tmp_y = max_y;
-        if(now_x < min_x) min_x = now_x;
-        if(now_y > max_y) max_y = now_y;
-
-        now++;
-        if(now > max_cnt) max_cnt = now;
-
-        // 다음 거 선택
-        choice(num + 1);
-
-        // 뽑은 거 취소하고
-        // 지금이 1,4고 3,4를 취소해야 돼 => 1,2로 만들어야 됨
-        // 지금이 1,4고 1,2를 취소해야 돼 => 3,4로
-        if(max_y == now_y) {
-            max_y = now_x - 1;
-        }
-        if(min_x == now_x) {
-            min_x = now_y + 1;
-        }
-        now--;
     }
+
+    if (canSelect) {
+        selected.push_back(seg[idx]);
+        backtrack(idx + 1, count + 1);
+        selected.pop_back(); // 원상복구
+    }
+
+    // 선택하지 않는 경우
+    backtrack(idx + 1, count);
 }
 
 int main() {
     cin >> n;
-
     for (int i = 0; i < n; i++) {
-        cin >> x1[i] >> x2[i];
+        cin >> seg[i].first >> seg[i].second;
     }
 
-    choice(0);
+    backtrack(0, 0);
 
-    cout << max_cnt;
-
+    cout << max_cnt << endl;
     return 0;
 }
