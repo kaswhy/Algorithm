@@ -37,10 +37,10 @@ void choice(int num){
         // 뽑은 거 취소하고
         // 지금이 1,4고 3,4를 취소해야 돼 => 1,2로 만들어야 됨
         // 지금이 1,4고 1,2를 취소해야 돼 => 3,4로
-        if(max_y = now_y) {
+        if(max_y == now_y) {
             max_y = now_x - 1;
         }
-        if(min_x = now_x) {
+        if(min_x == now_x) {
             min_x = now_y + 1;
         }
         now--;
