@@ -6,7 +6,7 @@ int n;
 int x1[15], x2[15];
 int now = 0;
 int max_cnt = 0;
-bool v[1001];
+int min_x = 1000, max_y = 0;
 
 void choice(int num){
     if(num == n){
@@ -15,21 +15,19 @@ void choice(int num){
 
     for(int i = num; i < n; i++) {
         // 현재 선분이 선택되지 않은 상태면 선택
-        bool is_chosen = false;
-        int x = x1[i];
-        int y = x2[i];
+        int now_x = x1[i];
+        int now_y = x2[i]; // 현재 선분
 
-        for(int j = x; j<=y; j++) {
-            if(v[j]) {
-                is_chosen = true;
-                break;
-            }
+        // 선택된 거면 다음 거 보기
+        if((min_x <= now_x && now_x <= max_y) || (min_x <= now_y && now_y <= max_y)) {
+            continue;
         }
-        if(is_chosen) continue;
 
-        for(int j = x; j<=y; j++) {
-            v[j] = true;
-        }
+        // 선택 안 된 거면 업데이트
+        int tmp_x = min_x, tmp_y = max_y;
+        if(now_x < min_x) min_x = now_x;
+        if(now_y > max_y) max_y = now_y;
+
         now++;
         if(now > max_cnt) max_cnt = now;
 
@@ -37,8 +35,13 @@ void choice(int num){
         choice(num + 1);
 
         // 뽑은 거 취소하고
-        for(int j = x; j<=y; j++) {
-            v[j] = false;
+        // 지금이 1,4고 3,4를 취소해야 돼 => 1,2로 만들어야 됨
+        // 지금이 1,4고 1,2를 취소해야 돼 => 3,4로
+        if(max_y = now_y) {
+            max_y = now_x - 1;
+        }
+        if(min_x = now_x) {
+            min_x = now_y + 1;
         }
         now--;
     }
