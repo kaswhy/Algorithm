@@ -1,5 +1,4 @@
 #include <string>
-#include <iostream>
 #include <cmath>
 #include <vector>
 
@@ -19,10 +18,7 @@ int solution(int n, int k) {
     
     for(int i = tmp.size() - 1; i >=0; i--) {
         knum += ('0' + tmp[i]);
-    }
-    
-    cout << knum;
-    
+    }    
     
     // 투포인터
     int i = 0, j = 0;
