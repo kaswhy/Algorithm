@@ -1,62 +1,69 @@
 #include <iostream>
-#include <vector>
 #include <string>
+#include <stack>
 using namespace std;
 
 int main() {
-    /*
-     * 입력: 문자열
-     * 출력: 각 줄이 균형인지의 여부
-     * 1. 한줄씩 문자열을 읽으면서 (, [는 스택에 push
-     * 2. 닫는 괄호를 만나면
-     *      - top에 있는 괄호가 매치되는지 확인 후
-     *      -> 매치되지 않으면 그냥
-     *      - 해당 문자열 pop
-     * 3. 온점을 만나면 스택이 비었는지 아닌지 확인
-     */
-    string s;
-
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    
+    string line;
     while(true) {
-        getline(cin, s);
-
-        vector<char> c;
-
-        if(s == "."){
+        getline(cin, line);
+        
+        // 종료 조건: 온점
+        if(line == ".") {
             break;
         }
-
-        for (int i = 0; i < s.size(); i++) {
-            if (s[i] == '(' || s[i] == '[') {
-                c.push_back(s[i]);
-            } else if (s[i] == ')') {
-                if (c.empty()) {
-                    cout << "no\n";
-                    break;
-                }
-                if (c[c.size() - 1] == '(') {
-                    c.pop_back();
-                    continue;
-                }
-                cout << "no\n";
-                break;
-            } else if (s[i] == ']') {
-                if (c.empty()) {
-                    cout << "no\n";
-                    break;
-                }
-                if (c[c.size() - 1] == '[') {
-                    c.pop_back();
-                    continue;
-                }
-                cout << "no\n";
-                break;
-            } else if (s[i] == '.') {
-                if (c.empty()) {
-                    cout << "yes\n";
-                    break;
-                }
-                cout << "no\n";
+        
+        // 한 줄씩 확인
+        stack<char> balances;
+        bool check = false; // 이미 line 다 순회하기 전에 체크했는지
+        for(int i = 0; i<line.size(); i++ && !check) {
+            // 왼쪽 괄호면 push
+            if(line[i] == '(' || line[i] == '[') {
+                balances.push(line[i]);
+                continue;
             }
+            
+            // 오른쪽 괄호면 pop
+            // 근데 비어있으면 바로 no 출력
+            if(line[i] == ')') {
+                if(balances.empty()) {
+                    check = true;
+                    continue;
+                }
+                if(balances.top() != '(') {
+                    check = true;
+                    continue;
+                }
+                balances.pop();
+            }
+            else if(line[i] == ']') {
+                if(balances.empty()) {
+                    check = true;
+                    continue;
+                }
+                if(balances.top() != '[') {
+                    check = true;
+                    continue;
+                }
+                balances.pop();
+            }
+        }
+        
+        // 순회 끝나고 체크
+        if(check == false && balances.empty()) {
+            cout << "yes\n";
+            continue;
+        }
+        if(check == false && balances.empty() == false) {
+            cout << "no\n";
+            continue;
+        }
+        if(check == true) {
+            cout << "no\n";
         }
     }
 }
